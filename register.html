@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-wrap: wrap; /* allow wrapping on small screens */
+      background: linear-gradient(135deg, #0b1220, #111827);
+      color: white;
+    }
+
+    /* LEFT PANEL */
+    .left {
+      flex: 1 1 400px; /* grow, shrink, base width */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px;
+      background: linear-gradient(180deg, #0ea5e9, #22c55e);
+      color: #0b1220;
+      min-width: 300px;
+    }
+
+    .left h1 {
+      font-size: 36px;
+      margin-bottom: 15px;
+    }
+
+    .left p {
+      font-size: 15px;
+      max-width: 420px;
+    }
+
+    /* SCENE */
+    .scene {
+      position: relative;
+      height: 120px;
+      margin-top: 40px;
+      background: #0b1220;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: inset 0 0 25px rgba(0,0,0,0.6);
+      max-width: 100%;
+    }
+
+    /* ROAD */
+    .road {
+      position: absolute;
+      bottom: 20px;
+      width: 200%;
+      height: 4px;
+      background: repeating-linear-gradient(
+        90deg,
+        #fff 0px,
+        #fff 35px,
+        transparent 35px,
+        transparent 70px
+      );
+      animation: roadMove 1.5s linear infinite;
+    }
+
+    /* CAR */
+    .car {
+      position: absolute;
+      bottom: 30px;
+      left: 15%;
+      width: 70px;
+      height: 28px;
+      background: linear-gradient(90deg, #1f2937, #374151);
+      border-radius: 8px 14px 6px 6px;
+    }
+
+    /* ROOF */
+    .car::before {
+      content: "";
+      position: absolute;
+      top: -12px;
+      left: 15px;
+      width: 40px;
+      height: 14px;
+      background: #111827;
+      border-radius: 6px 6px 0 0;
+    }
+
+    /* HEADLIGHT */
+    .car::after {
+      content: "";
+      position: absolute;
+      right: -6px;
+      top: 10px;
+      width: 8px;
+      height: 5px;
+      background: #fff;
+      border-radius: 2px;
+      box-shadow: 0 0 10px #fff;
+    }
+
+    /* WHEELS */
+    .wheel {
+      position: absolute;
+      bottom: -8px;
+      width: 14px;
+      height: 14px;
+      background: #000;
+      border-radius: 50%;
+      border: 2px solid #9ca3af;
+      animation: spin 0.6s linear infinite;
+    }
+
+    .wheel.front {
+      right: 10px;
+    }
+
+    .wheel.back {
+      left: 10px;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* WARNING */
+    .warning {
+      position: absolute;
+      right: 25%;
+      top: 15px;
+      width: 25px;
+      height: 25px;
+      border: 2px solid red;
+      border-radius: 4px;
+      opacity: 0;
+      animation: warn 3s infinite;
+    }
+
+    /* SHIELD */
+    .shield {
+      position: absolute;
+      right: 22%;
+      bottom: 15px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid #22c55e;
+      box-shadow: 0 0 20px rgba(34,197,94,0.4);
+      opacity: 0;
+      animation: protect 3s infinite;
+    }
+
+    /* ANIMATIONS */
+    @keyframes roadMove {
+      from { transform: translateX(0); }
+      to { transform: translateX(-70px); }
+    }
+
+    @keyframes warn {
+      0%, 50% { opacity: 0; }
+      60% { opacity: 1; transform: scale(1.1); }
+      80% { opacity: 0; }
+    }
+
+    @keyframes protect {
+      0%, 60% { opacity: 0; }
+      70% { opacity: 1; transform: scale(1); }
+      90% { transform: scale(1.4); opacity: 0; }
+    }
+
+    /* RIGHT PANEL */
+    .right {
+      flex: 1 1 320px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ffffff, #f1f5f9, #e2e8f0);
+      min-width: 300px;
+      padding: 30px;
+    }
+
+    .form-box {
+      width: 100%;
+      max-width: 320px;
+      padding: 30px;
+      background: rgba(17, 24, 39, 0.9); /* dark glass */
+      border-radius: 14px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 0 30px rgba(0, 255, 150, 0.2);
+      animation: fadeIn 1s ease;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color:white;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: none;
+      background: #1f2937;
+      color: white;
+    }
+
+    input:focus {
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(45deg, #22c55e, #0ea5e9);
+      color: black;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    /* RESPONSIVE */
+    @media(max-width: 900px) {
+      body {
+        flex-direction: column;
+      }
+
+      .left, .right {
+        padding: 30px;
+      }
+
+      .left h1 {
+        font-size: 28px;
+      }
+
+      .scene {
+        height: 100px;
+      }
+
+      .car {
+        width: 60px;
+        height: 24px;
+      }
+
+      .car::before {
+        width: 34px;
+        height: 12px;
+        left: 13px;
+        top: -10px;
+      }
+
+      .wheel {
+        width: 12px;
+        height: 12px;
+        bottom: -6px;
+      }
+
+      .shield {
+        width: 40px;
+        height: 40px;
+        bottom: 12px;
+      }
+
+      .warning {
+        width: 20px;
+        height: 20px;
+      }
+    }
+ .right h6 {
+        text-align:center;
+                padding-top:10px;
+
+      }
+      .right h6 a {
+        color: white;
+text-decoration: none;
+        
+      }
+
+    @media(max-width: 500px) {
+      .left, .right {
+        padding: 20px;
+      }
+
+      .left h1 {
+        font-size: 24px;
+      }
+     
+      input, button {
+        padding: 10px;
+      }
+    }
+.error {
+  color: red;
+  font-size: 12px;
+  margin: 5px 0;
+}
+  </style>
+</head>
+
+<body>
+
+<!-- LEFT -->
+<div class="left">
+  <h1>Vehicle Safety System</h1>
+  <p>
+    Intelligent monitoring system that detects driver fatigue and prevents accidents through automated safety response.
+  </p>
+
+  <div class="scene">
+    <div class="road"></div>
+
+    <div class="car">
+      <div class="wheel front"></div>
+      <div class="wheel back"></div>
+    </div>
+
+    <div class="warning"></div>
+    <div class="shield"></div>
+  </div>
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+  <div class="form-box">
+    <h2>Create Account</h2>
+
+    <input type="text" id="name" placeholder="Name">
+<p id="nameError" class="error"></p>
+
+<input type="text" id="phone" placeholder="Phone">
+<p id="phoneError" class="error"></p>
+
+<input type="text" id="vehicle" placeholder="Vehicle">
+<p id="vehicleError" class="error"></p>
+
+<div style="position:relative;">
+  <input type="password" id="password" placeholder="Password">
+  <span onclick="togglePassword()" 
+        style="position:absolute; right:10px; top:12px; cursor:pointer;">
+        👁️
+  </span>
+</div>
+<p id="passwordError" class="error"></p>
+
+    <button onclick="register()">Register</button>
+
+<h6>
+  <a href="login.html">Have An Account? Login</a>
+</h6>  </div>
+</div>
+
+
+<script type="module">
+import { db } from "./js/firebase.js";
+import { collection, doc, setDoc } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// 🔥 PASSWORD TOGGLE (CORRECT PLACE)
+window.togglePassword = function () {
+  let pass = document.getElementById("password");
+
+  if (pass.type === "password") {
+    pass.type = "text";
+  } else {
+    pass.type = "password";
+  }
+};
+
+// 🔥 REGISTER FUNCTION (ONLY ONE TIME)
+window.register = async () => {
+
+  let name = document.getElementById("name").value.trim();
+  let phone = document.getElementById("phone").value.trim();
+  let vehicle = document.getElementById("vehicle").value.trim();
+  let password = document.getElementById("password").value.trim();
+
+  let nameError = document.getElementById("nameError");
+  let phoneError = document.getElementById("phoneError");
+  let vehicleError = document.getElementById("vehicleError");
+  let passwordError = document.getElementById("passwordError");
+
+  // clear old errors
+  nameError.innerText = "";
+  phoneError.innerText = "";
+  vehicleError.innerText = "";
+  passwordError.innerText = "";
+
+  let valid = true;
+
+  // NAME
+  if (name === "") {
+    nameError.innerText = "Name required";
+    valid = false;
+  }
+
+  // PHONE
+  let phonePattern = /^[6-9]\d{9}$/;
+
+  if (phone === "") {
+    phoneError.innerText = "Phone required";
+    valid = false;
+  } else if (!phonePattern.test(phone)) {
+    phoneError.innerText = "Invalid mobile number";
+    valid = false;
+  }
+
+  // VEHICLE
+  if (vehicle === "") {
+    vehicleError.innerText = "Vehicle required";
+    valid = false;
+  }
+
+  // PASSWORD
+  if (password === "") {
+    passwordError.innerText = "Password required";
+    valid = false;
+  } else if (password.length < 8) {
+    passwordError.innerText = "Minimum 8 characters";
+    valid = false;
+  }
+
+  if (!valid) return;
+
+  const id = Date.now().toString();
+
+  await setDoc(doc(db, "users", id), {
+    name: name,
+    phone: phone,
+    vehicle: vehicle,
+    password: password
+  });
+
+  alert("Registered Successfully ✅");
+  window.location.href = "login.html";
+};
+
+</script>
+
+</body>
+</html>

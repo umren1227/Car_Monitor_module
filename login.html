@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+
+      /*🎨 USING BUTTON COLOR AS BACKGROUND */
+      background: linear-gradient(135deg, #38bdf8, #4ade80);
+      color: #0f172a;
+    }
+
+    /* SOFT OVERLAY FOR DEPTH */
+    body::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.15);
+      z-index: 0;
+    }
+
+    /* ROAD */
+    .road {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 100px;
+      background: rgba(0,0,0,0.5);
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .road::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 200%;
+      height: 4px;
+      transform: translateY(-50%);
+      background: repeating-linear-gradient(
+        90deg,
+        white 0px,
+        white 40px,
+        transparent 40px,
+        transparent 80px
+      );
+      animation: moveDashes 2s linear infinite;
+    }
+
+    @keyframes moveDashes {
+      from { transform: translateX(0) translateY(-50%); }
+      to { transform: translateX(-80px) translateY(-50%); }
+    }
+
+    /* CAR */
+    .car {
+      position: absolute;
+      bottom: 60px;
+      left: -220px;
+      width: 180px;
+      height: 70px;
+      animation: drive 7s linear infinite;
+      z-index: 1;
+    }
+
+    .car .body {
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(90deg, #374151, #6b7280);
+      border-radius: 20px 40px 15px 15px;
+      position: absolute;
+      bottom: 10px;
+    }
+
+    .car .roof {
+      position: absolute;
+      width: 90px;
+      height: 30px;
+      background: #1e293b;
+      top: 0;
+      left: 40px;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .car .window {
+      position: absolute;
+      width: 70px;
+      height: 20px;
+      background: rgba(255,255,255,0.3);
+      top: 5px;
+      left: 50px;
+      border-radius: 10px;
+    }
+
+    .car .headlight {
+      position: absolute;
+      right: -5px;
+      bottom: 20px;
+      width: 12px;
+      height: 6px;
+      background: white;
+      border-radius: 5px;
+    }
+
+    .car .taillight {
+      position: absolute;
+      left: -5px;
+      bottom: 20px;
+      width: 10px;
+      height: 6px;
+      background: red;
+      border-radius: 5px;
+    }
+
+    .wheel {
+      width: 26px;
+      height: 26px;
+      background: black;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 0;
+      border: 3px solid #ccc;
+      animation: spin 0.6s linear infinite;
+    }
+
+    .wheel.front { right: 15px; }
+    .wheel.back { left: 15px; }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes drive {
+      0% { left: -220px; }
+      100% { left: 110%; }
+    }
+
+    /* SHIELD */
+    .shield {
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.5);
+      box-shadow: 0 0 25px rgba(255,255,255,0.3);
+      animation: shieldPulse 2s infinite;
+      z-index: 1;
+    }
+
+    @keyframes shieldPulse {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      100% { transform: scale(1.4); opacity: 0; }
+    }
+
+    /* LOGIN BOX (UNCHANGED LOOK) */
+    .container {
+      position: relative;
+      z-index: 3;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(18px);
+      padding: 40px;
+      border-radius: 20px;
+      width: 320px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    h2 { margin-bottom: 25px; color: white; }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      background: #1f2937;
+      color: white;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 10px;
+
+      /* SAME AS BACKGROUND */
+      background: linear-gradient(45deg, #38bdf8, #4ade80);
+
+      color: black;
+      font-weight: 600;
+      cursor: pointer;
+    }
+.container h6 {
+        text-align:center;
+                padding-top:20px;
+
+      }
+      .container h6 a {
+        color: white;
+        text-decoration: none;
+        
+      }
+  </style>
+</head>
+
+<body>
+
+<div class="road"></div>
+
+<div class="car">
+  <div class="body"></div>
+  <div class="roof"></div>
+  <div class="window"></div>
+  <div class="headlight"></div>
+  <div class="taillight"></div>
+  <div class="wheel front"></div>
+  <div class="wheel back"></div>
+</div>
+
+<div class="shield"></div>
+
+<div class="container">
+  <h2>Vehicle Safety Login</h2>
+
+  <input type="text" id="phone" placeholder="Phone"><br><br>
+  <p id="phoneError" style="color:red; font-size:12px;"></p>
+  <div style="position:relative;">
+  <input type="password" id="password" placeholder="Password">
+
+  <span onclick="togglePassword()"
+        style="position:absolute; right:15px; top:12px; cursor:pointer; color:white;">
+        👁️
+  </span>
+</div>
+
+<p id="passwordError" style="color:red; font-size:12px;"></p>
+
+  <button onclick="login()">Login</button>
+
+  <h6>
+  <a href="register.html">Create Account</a>
+</h6>
+</div>
+
+<script type="module">
+import { db } from "./js/firebase.js";
+import { collection, getDocs, doc, setDoc } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+window.togglePassword = function () {
+  let pass = document.getElementById("password");
+
+  if (pass.type === "password") {
+    pass.type = "text";
+  } else {
+    pass.type = "password";
+  }
+};
+window.login = async () => {
+
+  let phone = document.getElementById("phone").value.trim();
+  let password = document.getElementById("password").value.trim();
+
+  let phoneError = document.getElementById("phoneError");
+  let passwordError = document.getElementById("passwordError");
+
+  // 🔥 clear old errors
+  phoneError.innerText = "";
+  passwordError.innerText = "";
+
+  let valid = true;
+
+  // 🔴 EMPTY CHECK
+  if (phone === "") {
+    phoneError.innerText = "Phone is required";
+    valid = false;
+  }
+
+  if (password === "") {
+    passwordError.innerText = "Password is required";
+    valid = false;
+  }
+
+  // 🔴 MOBILE VALIDATION
+  let phonePattern = /^[6-9]\d{9}$/;
+
+  if (phone !== "" && !phonePattern.test(phone)) {
+    phoneError.innerText = "Enter valid 10-digit mobile number";
+    valid = false;
+  }
+
+  // 🔴 PASSWORD VALIDATION
+  if (password !== "" && password.length < 8) {
+    passwordError.innerText = "Minimum 8 characters required";
+    valid = false;
+  }
+
+  // ❌ STOP IF INVALID
+  if (!valid) return;
+
+  // 🔥 ORIGINAL LOGIC SAME (NO CHANGE)
+  const querySnapshot = await getDocs(collection(db, "users"));
+
+  let found = false;
+
+  querySnapshot.forEach(async (docSnap) => {
+    let data = docSnap.data();
+
+    if (data.phone === phone && data.password === password) {
+      found = true;
+
+      localStorage.setItem("USER_ID", docSnap.id);
+
+      await setDoc(doc(db, "system", "current_user"), {
+        user_id: docSnap.id
+      });
+
+      alert("Login Successful");
+
+      window.location.href = "dashboard.html";
+    }
+  });
+
+  if (!found) {
+    passwordError.innerText = "Invalid Credentials ";
+  }
+};
+</script>
+
+</body>
+</html>
