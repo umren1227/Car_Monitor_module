@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Driver Dashboard - Vehicle Safety</title>
+
+  <!-- FONTS -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- LOTTIE -->
+  <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #111827, #1f2937);
+      color: #e5e7eb;
+      padding: 25px;
+      padding-top: 85px; /* Space for fixed nav */
+    }
+
+    /* NAVIGATION BAR */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-logo {
+      color: #60a5fa;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 14px;
+      font-weight: 400;
+      transition: 0.3s;
+      opacity: 0.8;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+      color: #60a5fa;
+    }
+
+    /* TITLE */
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 2px;
+      margin-bottom: 25px;
+      color: #60a5fa;
+      text-shadow: 0 0 8px rgba(96,165,250,0.4);
+    }
+
+    /* GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    /* CARD */
+    .card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      padding: 20px;
+      border-radius: 14px;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 20px rgba(96,165,250,0.15);
+    }
+
+    .label { font-size: 13px; opacity: 0.7; }
+    .value { font-family: 'Orbitron', sans-serif; font-size: 22px; margin-top: 8px; }
+
+    /* STATUS COLORS */
+    .green { color: #4ade80; text-shadow: 0 0 6px rgba(74,222,128,0.5); }
+    .red { color: #f87171; text-shadow: 0 0 6px rgba(248,113,113,0.5); animation: blink 1.2s infinite; }
+    .yellow { color: #facc15; text-shadow: 0 0 6px rgba(250,204,21,0.5); }
+    .blue { color: #38bdf8; text-shadow: 0 0 6px rgba(56,189,248,0.5); }
+
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+    /* HISTORY */
+    .history-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      padding: 20px;
+      border-radius: 14px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .history-box h3 { font-family: 'Orbitron', sans-serif; margin-bottom: 15px; color: #4ade80; }
+    .session { margin-bottom: 15px; }
+    .session h4 { font-size: 13px; color: #60a5fa; margin-bottom: 5px; }
+    ul { list-style: none; }
+    li {
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      font-size: 12px;
+      background: rgba(255,255,255,0.05);
+      border-left: 3px solid #4ade80;
+      transition: 0.3s;
+    }
+    li:hover { background: rgba(74,222,128,0.12); transform: translateX(4px); }
+
+    .car-section { margin-top: 30px; display: flex; justify-content: center; align-items: center; }
+    dotlottie-wc { width: 420px; height: 180px; opacity: 0.95; }
+
+    .camera-section { margin-top: 30px; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 14px; text-align: center; }
+    .camera-feed { width: 100%; max-width: 500px; border-radius: 10px; border: 2px solid #60a5fa; box-shadow: 0 0 15px rgba(96,165,250,0.2); }
+
+    /* FULL CARD COLORS */
+    .card.green { background: rgba(34,197,94,0.15); border-color: #22c55e; }
+    .card.red { background: rgba(239,68,68,0.15); border-color: #ef4444; }
+    .card.yellow { background: rgba(250,204,21,0.15); border-color: #facc15; }
+    .card.blue { background: rgba(56,189,248,0.15); border-color: #38bdf8; }
+
+    @media (max-width: 768px) {
+      dotlottie-wc { width: 100%; height: auto; }
+      nav { padding: 10px 20px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">🛡️ V-SAFETY</a>
+  <div class="nav-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="profile.html">Profile</a>
+    <a href="login.html">Logout</a>
+  </div>
+</nav>
+
+<h2>VEHICLE SAFETY INTERFACE</h2>
+
+<div class="grid">
+  <div class="card">
+    <div class="label">SYSTEM STATUS</div>
+    <div id="system" class="value">--</div>
+  </div>
+  <div class="card">
+    <div class="label">EYE MONITOR</div>
+    <div id="eye" class="value">--</div>
+  </div>
+  <div class="card">
+    <div class="label">ALERT LEVEL</div>
+    <div id="alert" class="value">--</div>
+  </div>
+  <div class="card">
+    <div class="label">SMS RESPONSE</div>
+    <div id="sms" class="value">--</div>
+  </div>
+</div>
+
+<div class="history-box">
+  <h3>EVENT LOG</h3>
+  <div id="history"></div>
+</div>
+
+<div class="car-section">
+  <dotlottie-wc src="https://lottie.host/87d3dc24-9123-4411-9dde-1243858f1f0f/HQczsfIGkM.lottie" autoplay loop></dotlottie-wc>
+</div>
+
+<div class="camera-section">
+  <h3>Live Driver Camera</h3>
+  <img id="liveCam" class="camera-feed" alt="Camera Feed Not Found">
+</div>
+
+<script type="module">
+  function loadCamera() {
+  const img = document.getElementById("liveCam");
+  img.src = "http://127.0.0.1:5000/video?t=" + new Date().getTime();
+}
+
+// 🔁 reload every 2 sec
+setInterval(loadCamera, 2000);
+loadCamera();
+
+import { db } from "./js/firebase.js";
+
+import {
+  doc,
+  onSnapshot,
+  collection,
+  getDocs,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+let USER_ID = "";
+
+/* 🔥 START DASHBOARD */
+async function startDashboard() {
+
+  const userDoc = await getDoc(doc(db, "system", "current_user"));
+
+  if (!userDoc.exists()) {
+    document.getElementById("history").innerHTML = "No user found ";
+    return;
+  }
+
+  USER_ID = userDoc.data().user_id;
+
+  console.log("USER_ID:", USER_ID); // ✅ debug
+
+  loadHistory(); // history load
+}
+
+startDashboard();
+
+
+/* 🔥 LIVE STATUS */
+onSnapshot(doc(db, "live_status", "current"), (docSnap) => {
+  if (docSnap.exists()) {
+    let data = docSnap.data();
+
+    updateStatus("system", data.system);
+    updateStatus("eye", data.eye);
+    updateStatus("alert", data.alert);
+    updateStatus("sms", data.sms);
+  }
+});
+
+
+/* 🔥 STATUS UI */
+function updateStatus(id, value) {
+  let el = document.getElementById(id);
+  let card = el.closest(".card"); // 🔥 parent card
+
+  el.innerText = value;
+
+  // remove old classes
+  el.classList.remove("green", "red", "yellow");
+  card.classList.remove("green", "red", "yellow");
+
+  let v = value.toLowerCase();
+
+if (id === "system") {
+
+  let clean = v.trim(); // 🔥 remove extra space
+
+  if (clean === "deactive") {
+    card.classList.add("red");   // 🔴 DEACTIVE
+  } else if (clean === "active") {
+    card.classList.add("green"); // 🟢 ACTIVE
+  } else {
+    card.classList.add("yellow");
+  }
+}
+
+  // 🔥 EYE LOGIC
+  else if (id === "eye") {
+    if (v.includes("open")) {
+      card.classList.add("green");
+    } else {
+      card.classList.add("red");
+    }
+  }
+
+  // 🔥 ALERT
+  else if (id === "alert") {
+    if (v.includes("running")) {
+      card.classList.add("green");
+    } else if (v.includes("stop")) {
+      card.classList.add("yellow");
+    } else {
+      card.classList.add("red");
+    }
+  }
+
+  // 🔥 SMS
+  else if (id === "sms") {
+    if (v.includes("sent")) {
+      card.classList.add("blue");
+    } else {
+      card.classList.add("yellow");
+    }
+  }
+}
+
+
+/* 🔥 HISTORY LOAD (FINAL FIX) */
+function loadHistory() {
+
+  const sessionsRef = collection(db, "alerts", USER_ID, "sessions");
+
+  onSnapshot(sessionsRef, async (sessionSnap) => {
+
+    let container = document.getElementById("history");
+    container.innerHTML = "";
+
+    // 🔥 STEP 1: sessions ko sort karo (latest first)
+    let sessions = sessionSnap.docs.sort((a, b) => {
+      let numA = parseInt(a.id.split("_")[1]);
+      let numB = parseInt(b.id.split("_")[1]);
+      return numB - numA; // DESC
+    });
+
+    for (const sessionDoc of sessions) {
+
+      let sessionDiv = document.createElement("div");
+      sessionDiv.className = "session";
+
+      let title = document.createElement("h4");
+      title.innerText = "Session: " + sessionDoc.id;
+
+      let ul = document.createElement("ul");
+
+      sessionDiv.appendChild(title);
+      sessionDiv.appendChild(ul);
+      container.appendChild(sessionDiv);
+
+      const historyRef = collection(
+        db,
+        "alerts",
+        USER_ID,
+        "sessions",
+        sessionDoc.id,
+        "history"
+      );
+
+      const historySnap = await getDocs(historyRef);
+
+ let historyList = historySnap.docs.sort((a, b) => {
+
+  let d1 = a.data().time;
+  let d2 = b.data().time;
+
+  // 🔥 convert "26-03-2026 15:45:14" → Date object
+  function parseDate(str) {
+    let [date, time] = str.split(" ");
+    let [day, month, year] = date.split("-");
+    return new Date(`${year}-${month}-${day}T${time}`);
+  }
+
+  return parseDate(d2) - parseDate(d1); // DESC (latest first)
+});
+
+      historyList.forEach((docSnap) => {
+        let data = docSnap.data();
+
+        let li = document.createElement("li");
+        li.innerText = `${data.status} | ${data.time} | ${data.action}`;
+
+        ul.appendChild(li);
+      });
+
+    }
+
+  });
+
+}
+</script>
+
+</body>
+</html>
