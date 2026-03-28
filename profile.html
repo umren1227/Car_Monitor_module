@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile - Vehicle Safety</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
+
+  <style>
+    :root {
+      --primary-teal: #00a896;
+      --bg-dark: #111827;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --accent-orange: #ff8c42;
+      --accent-blue: #38bdf8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background-color: #f3f4f6;
+      color: #1f2937;
+      min-height: 100vh;
+      padding-top: 70px;
+      overflow-x: hidden;
+    }
+
+    /* NAVIGATION BAR */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-logo {
+      color: var(--primary-teal);
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      text-decoration: none;
+    }
+
+    .nav-links a {
+      color: #4b5563;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--primary-teal); }
+
+    /* HEADER SECTION */
+    .profile-header {
+      background-color: var(--primary-teal);
+      height: 220px;
+      width: 100%;
+      position: relative;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      display: flex;
+      justify-content: center;
+      padding-top: 30px;
+    }
+
+    .back-btn, .settings-btn {
+      position: absolute;
+      top: 25px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .back-btn { left: 25px; font-size: 18px; }
+    .settings-btn { right: 25px; }
+
+    /* PROFILE CARD */
+    .profile-card {
+      width: 90%;
+      max-width: 500px;
+      margin: -100px auto 0;
+      position: relative;
+      z-index: 10;
+      padding-bottom: 40px;
+    }
+
+    .avatar-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .avatar-container {
+      position: relative;
+      width: 130px;
+      height: 130px;
+      cursor: pointer;
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      background: #ddd url('https://i.pravatar.cc/150?u=driver') center/cover;
+      border: 6px solid white;
+      border-radius: 50%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      transition: 0.3s ease;
+    }
+
+    .avatar-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 10px;
+      opacity: 0;
+      transition: 0.3s ease;
+      border: 6px solid transparent;
+    }
+
+    .avatar-container:hover .avatar-overlay { opacity: 1; }
+    .avatar-container:hover .avatar { filter: blur(1px); }
+
+    .user-info {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .name-group h2 { font-size: 26px; color: #111827; font-weight: 600; margin-bottom: 4px; }
+    .name-group p { font-size: 14px; color: #6b7280; font-weight: 400; }
+
+    /* VEHICLE DISPLAY SECTION */
+    .garage-card {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border-radius: 24px;
+      padding: 20px;
+      color: white;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .garage-card h3 { font-family: 'Orbitron', sans-serif; font-size: 12px; letter-spacing: 2px; color: var(--accent-blue); margin-bottom: 5px; }
+    .vehicle-name { font-size: 18px; font-weight: 600; margin-bottom: 15px; }
+    .car-visual { display: flex; justify-content: center; align-items: center; height: 120px; margin: 10px 0; }
+    dotlottie-wc { width: 280px; height: 140px; filter: drop-shadow(0 0 10px rgba(56,189,248,0.3)); }
+
+    .vehicle-stats { display: flex; justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; margin-top: 10px; }
+    .v-stat { text-align: center; }
+    .v-stat span { font-size: 10px; opacity: 0.6; display: block; }
+    .v-stat b { font-size: 14px; font-family: 'Orbitron', sans-serif; color: #fff; }
+
+    /* STATS GRID */
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+    .item-card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: relative; }
+    .item-card .icon { font-size: 20px; margin-bottom: 8px; display: block; }
+    .item-card .val { font-size: 22px; font-weight: 600; color: #111827; }
+    .item-card .lab { font-size: 11px; color: #9ca3af; }
+
+    .chart-box { grid-column: span 2; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 20px; }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .bar-container { display: flex; align-items: flex-end; justify-content: space-between; height: 100px; padding: 0 5px; }
+
+    .bar-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 10%;
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .bar {
+      width: 100%;
+      background: #f1f5f9;
+      border-radius: 6px;
+      transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 5%; /* Initial small height */
+    }
+    .bar.active { background: var(--accent-orange); }
+
+    .chart-footer { display: flex; justify-content: space-between; margin-top: 12px; color: #9ca3af; font-size: 10px; }
+
+    @media (max-width: 480px) {
+      .profile-card { width: 92%; }
+      nav { padding: 15px 20px; }
+    }
+
+    #statusMsg {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      background: #22c55e;
+      color: white;
+      font-size: 13px;
+      z-index: 2000;
+      display: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+
+<body>
+
+<nav>
+  <a href="dashboard.html" class="nav-logo">🛡️ V-SAFETY</a>
+  <div class="nav-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="profile.html" style="color: var(--primary-teal); font-weight: 600;">Profile</a>
+    <a href="#" id="logoutLink">Logout</a>
+  </div>
+</nav>
+
+<div class="profile-header">
+  <button class="back-btn" onclick="window.history.back()">❮</button>
+  <button class="settings-btn">⚙️</button>
+</div>
+
+<div class="profile-card">
+  <!-- Interactive Avatar Section -->
+  <div class="avatar-wrapper">
+    <div class="avatar-container" onclick="document.getElementById('pfpInput').click()">
+      <div id="pfpDisplay" class="avatar"></div>
+      <div class="avatar-overlay">
+        <span>📷</span>
+        <span>Change Photo</span>
+      </div>
+    </div>
+    <input type="file" id="pfpInput" accept="image/*" style="display: none;">
+  </div>
+
+  <div class="user-info">
+    <div class="name-group">
+      <h2 id="dispName">Loading Profile...</h2>
+      <p id="dispEmail">Fetching details...</p>
+    </div>
+  </div>
+
+  <!-- GARAGE / CAR SECTION -->
+  <div class="garage-card">
+    <h3>ACTIVE VEHICLE</h3>
+    <div class="vehicle-name" id="dispVehicle">--</div>
+
+    <div class="car-visual">
+      <dotlottie-wc
+        src="https://lottie.host/87d3dc24-9123-4411-9dde-1243858f1f0f/HQczsfIGkM.lottie"
+        autoplay
+        loop>
+      </dotlottie-wc>
+    </div>
+    <div class="vehicle-stats">
+      <div class="v-stat">
+        <span>SAFETY SCORE</span>
+      </div>
+      <div class="v-stat">
+        <span>HEALTH</span>
+      </div>
+      <div class="v-stat">
+        <span>TRIPS</span>
+      </div>
+    </div>
+  </div>
+  
+
+
+    <div class="chart-box">
+      <div class="chart-header">
+        <h3>Weekly Activity</h3>
+        <span class="xp-label" id="weeklyTotal">0 sessions</span>
+      </div>
+      
+
+      <div class="bar-container">
+        <div class="bar-wrapper"><div id="bar-1" class="bar"></div></div> <!-- Mon -->
+        <div class="bar-wrapper"><div id="bar-2" class="bar"></div></div> <!-- Tue -->
+        <div class="bar-wrapper"><div id="bar-3" class="bar"></div></div> <!-- Wed -->
+        <div class="bar-wrapper"><div id="bar-4" class="bar"></div></div> <!-- Thu -->
+        <div class="bar-wrapper"><div id="bar-5" class="bar"></div></div> <!-- Fri -->
+        <div class="bar-wrapper"><div id="bar-6" class="bar"></div></div> <!-- Sat -->
+        <div class="bar-wrapper"><div id="bar-0" class="bar"></div></div> <!-- Sun -->
+      </div>
+
+      <div class="chart-footer">
+        <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="statusMsg"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc, onSnapshot, deleteDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBeA235ALQK-yngFZOJuPFgMXBzUwVVwIo",
+  authDomain: "car-safety-11c3a.firebaseapp.com",
+  projectId: "car-safety-11c3a",
+  storageBucket: "car-safety-11c3a.firebasestorage.app",
+  messagingSenderId: "325705492469",
+  appId: "1:325705492469:web:e7291ae9e3350e162022bc",
+  measurementId: "G-5W295M2MDS"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUserId = "";
+
+const showMsg = (text) => {
+  const el = document.getElementById("statusMsg");
+  el.innerText = text;
+  el.style.display = "block";
+  setTimeout(() => el.style.display = "none", 3000);
+};
+
+async function initProfile() {
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      try {
+        const currentUserRef = doc(db, 'system', 'current_user');
+        const currentUserSnap = await getDoc(currentUserRef);
+
+        if (currentUserSnap.exists()) {
+          currentUserId = currentUserSnap.data().user_id;
+          const userRef = doc(db, 'users', currentUserId);
+
+          onSnapshot(userRef, (docSnap) => {
+            if (docSnap.exists()) {
+              const data = docSnap.data();
+              document.getElementById("dispName").innerText = data.name || "User";
+              document.getElementById("dispEmail").innerText = data.phone || "No Phone";
+              document.getElementById("dispVehicle").innerText = data.vehicle || "No Vehicle Set";
+
+              if(data.profilePic) {
+                document.getElementById("pfpDisplay").style.backgroundImage = `url(${data.profilePic})`;
+              }
+
+              if(data.balance) document.getElementById("dispBalance").innerText = data.balance;
+              if(data.level) document.getElementById("dispLevel").innerText = data.level;
+              if(data.league) document.getElementById("dispLeague").innerText = data.league;
+              if(data.totalXP) document.getElementById("dispXP").innerText = data.totalXP;
+
+              // After loading user, calculate their weekly activity
+              updateWeeklyActivity(currentUserId);
+            }
+          });
+        }
+      } catch (error) { console.error(error); }
+    }
+  });
+}
+
+/**
+ * Fetches sessions and calculates activity per day
+ */
+async function updateWeeklyActivity(userId) {
+  try {
+    const sessionsRef = collection(db, 'alerts', userId, 'sessions');
+    const querySnapshot = await getDocs(sessionsRef);
+
+    // We'll count sessions per day of the week
+    // index 0=Sun, 1=Mon, ..., 6=Sat
+    let dayCounts = [0, 0, 0, 0, 0, 0, 0];
+    let totalSessions = 0;
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      let sessionDate;
+
+      // Logic to determine session date:
+      // 1. If doc has created_at timestamp field
+      // 2. If doc has a time string (like in your logs)
+      // 3. Fallback: use metadata if no fields exist (less accurate)
+
+      if (data.created_at && typeof data.created_at.toDate === 'function') {
+        sessionDate = data.created_at.toDate();
+      } else if (data.time) {
+        // Parse "27-03-2026 11:51:22"
+        const parts = data.time.split(" ");
+        const dParts = parts[0].split("-");
+        sessionDate = new Date(`${dParts[2]}-${dParts[1]}-${dParts[0]}T${parts[1]}`);
+      } else {
+        // As a last resort, if sessions don't have dates, we'll simulate logic
+        // or just count them for current day.
+        // TIP: Add a 'created_at' field in Firebase when starting a session!
+        sessionDate = new Date();
+      }
+
+      // Filter for current week (last 7 days)
+      const now = new Date();
+      const diff = now - sessionDate;
+      const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
+
+      if (diff <= sevenDaysInMs) {
+        const dayIndex = sessionDate.getDay();
+        dayCounts[dayIndex]++;
+        totalSessions++;
+      }
+    });
+
+    // Update UI
+    document.getElementById('weeklyTotal').innerText = `${totalSessions} sessions this week`;
+
+    // Calculate max to scale bars (min scale at 5 sessions to keep it looking good)
+    const maxSessions = Math.max(...dayCounts, 5);
+
+    dayCounts.forEach((count, index) => {
+      const bar = document.getElementById(`bar-${index}`);
+      if (bar) {
+        const heightPercent = (count / maxSessions) * 100;
+        bar.style.height = `${Math.max(heightPercent, 5)}%`; // Min 5% height
+
+        // Highlight current day
+        const today = new Date().getDay();
+        if (index === today) {
+          bar.classList.add('active');
+        } else {
+          bar.classList.remove('active');
+        }
+      }
+    });
+
+  } catch (err) {
+    console.error("Activity fetch error:", err);
+  }
+}
+
+// Image Upload Logic
+document.getElementById('pfpInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file || !currentUserId) return;
+
+  const reader = new FileReader();
+  reader.onload = async function(event) {
+    const base64String = event.target.result;
+
+    try {
+      showMsg("Uploading...");
+      const userRef = doc(db, 'users', currentUserId);
+      await updateDoc(userRef, {
+        profilePic: base64String
+      });
+      showMsg("Profile Picture Updated! ✅");
+    } catch (err) {
+      console.error(err);
+      showMsg("Upload Failed ❌");
+    }
+  };
+  reader.readAsDataURL(file);
+});
+
+// LOGOUT LOGIC
+document.getElementById("logoutLink").addEventListener("click", async (e) => {
+    e.preventDefault();
+    try {
+        await deleteDoc(doc(db, 'system', 'current_user'));
+        await signOut(auth);
+        window.location.href = "login.html";
+    } catch (error) { console.error(error); }
+});
+
+signInAnonymously(auth).then(() => initProfile());
+</script>
+
+</body>
+</html>
